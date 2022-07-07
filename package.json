@@ -1,0 +1,41 @@
+{
+  "name": "Calculator-App",
+  "version": "1.0.0",
+  "author": "Atharv Pote <atharvpote@gmail.com>",
+  "license": "MIT",
+  "source": "src/index.html",
+  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "scripts": {
+    "start": "parcel",
+    "build": "parcel build",
+    "lint:css": "stylelint --customSyntax '@stylelint/postcss-css-in-js' './src/**/*.js'",
+    "lint:js": "eslint './src/**/*.{html,js}'",
+    "format": "prettier --write './src/**/*.{html,js}'"
+  },
+  "dependencies": {
+    "polished": "^4.2.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-is": "^18.2.0",
+    "styled-components": "^5.3.5"
+  },
+  "devDependencies": {
+    "@stylelint/postcss-css-in-js": "^0.38.0",
+    "babel-plugin-styled-components": "^2.0.7",
+    "eslint": "^8.19.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-react": "^7.30.1",
+    "parcel": "^2.6.2",
+    "postcss": "^8.4.14",
+    "postcss-syntax": "^0.36.2",
+    "prettier": "^2.7.1",
+    "process": "^0.11.10",
+    "stylelint": "^14.9.1",
+    "stylelint-config-idiomatic-order": "^8.1.0",
+    "stylelint-config-prettier": "^9.0.3",
+    "stylelint-config-recommended": "^8.0.0",
+    "stylelint-config-styled-components": "^0.1.1",
+    "stylelint-order": "^5.0.0",
+    "stylelint-processor-styled-components": "^1.10.0"
+  }
+}
