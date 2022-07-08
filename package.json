@@ -9,11 +9,12 @@
     "start": "parcel",
     "build": "parcel build",
     "lint:css": "stylelint --customSyntax '@stylelint/postcss-css-in-js' './src/**/*.js'",
-    "lint:js": "eslint './src/**/*.{html,js}'",
+    "lint:js": "eslint './src/**/*.js'",
     "format": "prettier --write './src/**/*.{html,js}'"
   },
   "dependencies": {
     "polished": "^4.2.2",
+    "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-is": "^18.2.0",

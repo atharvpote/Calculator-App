@@ -1,6 +1,6 @@
 import { backgroundColors, keyColors, textColors } from "./colors";
 
-export const theme1 = {
+export const dark = {
   backgrounds: {
     mainBackground: backgroundColors.veryDarkDesaturatedBlueV1,
     keypadBackground: backgroundColors.veryDarkDesaturatedBlueV2,
@@ -25,11 +25,14 @@ export const theme1 = {
   },
   toggle: {
     toggleColor: keyColors.red,
-    togglesBackground: backgroundColors.veryDarkDesaturatedBlueV2,
+    toggleBackground: backgroundColors.veryDarkDesaturatedBlueV2,
+  },
+  text: {
+    title: textColors.white,
   },
 };
 
-export const theme2 = {
+export const light = {
   backgrounds: {
     mainBackground: backgroundColors.lightGray,
     keypadBackground: backgroundColors.grayishRed,
@@ -56,9 +59,12 @@ export const theme2 = {
     toggleColor: keyColors.orange,
     togglesBackground: backgroundColors.grayishRed,
   },
+  text: {
+    title: textColors.veryDarkGrayishYellow,
+  },
 };
 
-export const theme3 = {
+export const purple = {
   backgrounds: {
     mainBackground: backgroundColors.veryDarkVioletV1,
     keypadBackground: backgroundColors.veryDarkVioletV2,
@@ -84,5 +90,8 @@ export const theme3 = {
   toggle: {
     toggleColor: keyColors.pureCyan,
     togglesBackground: backgroundColors.veryDarkVioletV2,
+  },
+  text: {
+    title: textColors.lightYellow,
   },
 };

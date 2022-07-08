@@ -2,9 +2,9 @@ import { rem } from "polished";
 
 export const fontFamily = `'League Spartan', sans-serif`;
 
-export const baseFontSize = 32;
+export const baseFontSize = 16;
 
-const scaleFactor = 1.125;
+const scaleFactor = 1.25;
 
 export const typeScale = {
   heading1: `${rem(baseFontSize * scaleFactor ** 5)}`,

@@ -1,6 +1,5 @@
-import { remToPx } from "polished";
 import { createGlobalStyle } from "styled-components";
-import { fontFamily, typeScale } from "./typography";
+import { baseFontSize, fontFamily } from "./typography";
 
 export const GlobalStyles = createGlobalStyle`
 html{
@@ -14,6 +13,11 @@ html{
 body{
     margin: 0;
     font-family: ${fontFamily};
-    font-size: ${remToPx(typeScale.paragraph)};
+    font-size: ${baseFontSize}px;
+    min-height: 100vh;
+    display: grid;
+    place-content: center;
+    background-color: ${({ theme }) => theme.backgrounds.mainBackground};
+    color: ${({ theme }) => theme.text.title};
 }
 `;

@@ -1,5 +1,5 @@
 export const backgroundColors = {
-  veryDarkDesaturatedBlueV1: "hsl(222, 26 %, 31 %)",
+  veryDarkDesaturatedBlueV1: "hsl(222, 26%, 31%)",
   veryDarkDesaturatedBlueV2: "hsl(223, 31%, 20%)",
   veryDarkDesaturatedBlueV3: "hsl(224, 36%, 15%)",
   lightGray: "hsl(0, 0%, 90%)",
@@ -32,7 +32,7 @@ export const keyColors = {
 
 export const textColors = {
   veryDarkGrayishBlue: "hsl(221, 14%, 31%)",
-  white: "hsl(0, 0, 100%)",
+  white: "hsl(0, 0%, 100%)",
   veryDarkGrayishYellow: "hsl(60, 10%, 19%)",
   lightYellow: "hsl(52, 100%, 62%)",
   veryDarkBlue: "hsl(198, 20%, 13%)",
