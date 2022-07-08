@@ -20,4 +20,14 @@ const StyledContainer = styled.div`
     "280px",
     "1440px"
   )}
+
+  ${fluidRange(
+    {
+      prop: "padding",
+      fromSize: "8px",
+      toSize: "0px",
+    },
+    "280px",
+    "375px"
+  )}
 `;

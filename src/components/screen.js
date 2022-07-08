@@ -6,15 +6,10 @@ import { StateContext } from "../stateManagement";
 export function Screen() {
   const { state } = useContext(StateContext);
 
-  return (
-    <StyledScreen
-      value={state.currentValue}
-      ltr={state.decimalToBeResolved}
-    ></StyledScreen>
-  );
+  return <StyledScreen>{state.currentValue}</StyledScreen>;
 }
 
-const StyledScreen = styled.input.attrs({ type: "text", disabled: true })`
+const StyledScreen = styled.div`
   display: block;
   width: 100%;
   background-color: ${({ theme }) => theme.backgrounds.screenBackground};
@@ -22,10 +17,9 @@ const StyledScreen = styled.input.attrs({ type: "text", disabled: true })`
   margin-block: 2rem;
   padding: 1.5rem;
   border-radius: 10px;
-  border: none;
   font-family: ${fontFamily};
   font-size: ${typeScale.heading2};
   text-align: right;
-  direction: ${({ ltr }) => (ltr ? "ltr" : "rtl")};
+  overflow-wrap: break-word;
   transition: all 0.5s;
 `;

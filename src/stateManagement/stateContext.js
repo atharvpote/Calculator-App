@@ -23,12 +23,12 @@ const initialState = {
   currentValue: "0",
   previousValue: null,
   lastOperation: null,
-  decimalToBeResolved: false,
   hasDecimal: false,
   equalsWasLastOperation: false,
 };
 
 function reducer(state, action) {
+  console.log(state);
   if (action.type === "NUM_PRESS") {
     return handleNumPress(state, action);
   }
@@ -42,19 +42,19 @@ function reducer(state, action) {
   }
 
   if (action.type === "ADD") {
-    return handleAdd(state);
+    return handleOperation(state, action);
   }
 
   if (action.type === "SUB") {
-    return handleSub(state);
+    return handleOperation(state, action);
   }
 
   if (action.type === "MULTIPLY") {
-    return handleMultiply(state);
+    return handleOperation(state, action);
   }
 
   if (action.type === "DIVIDE") {
-    return handleDivide(state);
+    return handleOperation(state, action);
   }
 
   if (action.type === "EQUALS") {
@@ -62,353 +62,155 @@ function reducer(state, action) {
   }
 
   if (action.type === "RESET") {
-    const currentTheme = state.currentTheme;
-    return { ...initialState, currentTheme };
+    return reset(state);
   }
 
   return state;
 }
 
 function handleNumPress(state, action) {
-  const newValue =
-    state.currentValue === "0" || state.equalsWasLastOperation
-      ? action.payload.value
-      : state.currentValue + action.payload.value;
+  if (state.previousValue !== null && !Number.isFinite(state.previousValue))
+    return reset(state);
 
-  if (isValidNumber(newValue))
-    if (state.equalsWasLastOperation) {
-      return {
-        ...state,
-        previousValue: null,
-        currentValue: newValue,
-        decimalToBeResolved: false,
-        equalsWasLastOperation: false,
-      };
-    }
-  return {
-    ...state,
-    currentValue: newValue,
-    decimalToBeResolved: false,
-    equalsWasLastOperation: false,
-  };
+  let newState = { ...state };
+
+  if (state.currentValue === "0" || state.equalsWasLastOperation) {
+    newState = {
+      ...newState,
+      currentValue: String(action.payload.value),
+      equalsWasLastOperation: false,
+    };
+  } else {
+    newState = {
+      ...newState,
+      currentValue: String(state.currentValue + action.payload.value),
+      equalsWasLastOperation: false,
+    };
+  }
+
+  if (isValidNumber(newState.currentValue)) return newState;
+
+  return state;
 }
 
 function handleDel(state) {
+  if (state.previousValue !== null && !Number.isFinite(state.previousValue))
+    return reset(state);
+
   const currentValue = state.currentValue;
+  const newCurrValue = currentValue.substring(0, currentValue.length - 1);
 
-  if (currentValue === "Infinity")
+  if (currentValue[currentValue.length - 2] === ".")
     return {
       ...state,
-      currentValue: "0",
-      decimalToBeResolved: true,
+      currentValue: String(newCurrValue),
     };
 
-  const newValue = currentValue.substring(0, currentValue.length - 1);
-
-  if (currentValue[currentValue.length - 2] === ".") {
+  if (currentValue[currentValue.length - 1] === ".")
     return {
       ...state,
-      currentValue: newValue,
-      decimalToBeResolved: true,
-    };
-  } else if (currentValue[currentValue.length - 1] === ".") {
-    return {
-      ...state,
-      currentValue: newValue,
+      currentValue: String(newCurrValue),
       hasDecimal: false,
-      decimalToBeResolved: false,
     };
-  } else if (!newValue.length) {
+
+  if (!newCurrValue.length)
     return {
       ...state,
       currentValue: "0",
     };
-  } else {
-    return {
-      ...state,
-      currentValue: newValue,
-    };
-  }
+
+  return {
+    ...state,
+    currentValue: String(newCurrValue),
+  };
 }
 
 function handleDecimal(state) {
+  if (state.previousValue !== null && !Number.isFinite(state.previousValue))
+    return reset(state);
+
+  if (state.equalsWasLastOperation && hasDecimal(state.currentValue))
+    return state;
+
   if (!state.hasDecimal) {
-    const newValue = state.currentValue + ".";
+    const newCurrValue = state.currentValue + ".";
 
     return {
       ...state,
-      currentValue: newValue,
-      decimalToBeResolved: true,
+      currentValue: String(newCurrValue),
       hasDecimal: true,
+      equalsWasLastOperation: false,
     };
   }
+
+  return state;
 }
 
-function handleAdd(state) {
-  if (!state.previousValue) {
-    const newPrevValue = state.currentValue;
+function handleOperation(state, action) {
+  if (state.previousValue !== null && !Number.isFinite(state.previousValue))
+    return reset(state);
 
-    return {
-      ...state,
-      lastOperation: "ADD",
-      previousValue: toDecimalNumber(newPrevValue),
-      currentValue: "0",
-      hasDecimal: false,
-    };
-  }
-
-  if (state.equalsWasLastOperation) {
-    const newPrevValue = state.currentValue;
-
-    return {
-      ...state,
-      lastOperation: "ADD",
-      previousValue: toDecimalNumber(newPrevValue),
-      currentValue: "0",
-      equalsWasLastOperation: false,
-      hasDecimal: false,
-    };
-  }
-
-  let newPrevValue;
-
-  if (state.lastOperation === "ADD")
-    newPrevValue = add(state.previousValue, state.currentValue);
-
-  if (state.lastOperation === "SUB")
-    newPrevValue = sub(state.previousValue, state.currentValue);
-
-  if (state.lastOperation === "MULTIPLY")
-    newPrevValue = multiply(state.previousValue, state.currentValue);
-
-  if (state.lastOperation === "DIVIDE")
-    newPrevValue = divide(state.previousValue, state.currentValue);
-
-  return {
+  const newState = {
     ...state,
-    lastOperation: "ADD",
-    previousValue: newPrevValue,
+    lastOperation: action.type,
+    previousValue: toDecimalNumber(state.currentValue),
     currentValue: "0",
     hasDecimal: false,
   };
-}
 
-function handleSub(state) {
-  if (!state.previousValue) {
-    const newPrevValue = state.currentValue;
-
-    return {
-      ...state,
-      lastOperation: "SUB",
-      previousValue: toDecimalNumber(newPrevValue),
-      currentValue: "0",
-      hasDecimal: false,
-    };
-  }
+  if (!state.previousValue) return newState;
 
   if (state.equalsWasLastOperation) {
-    const newPrevValue = state.currentValue;
-
     return {
-      ...state,
-      lastOperation: "SUB",
-      previousValue: toDecimalNumber(newPrevValue),
-      currentValue: "0",
+      ...newState,
       equalsWasLastOperation: false,
-      hasDecimal: false,
     };
   }
 
-  let newPrevValue;
+  const newPrevValue = handlePreviousOperations(state);
 
-  if (state.lastOperation === "ADD")
-    newPrevValue = add(state.previousValue, state.currentValue);
-
-  if (state.lastOperation === "SUB")
-    newPrevValue = sub(state.previousValue, state.currentValue);
-
-  if (state.lastOperation === "MULTIPLY")
-    newPrevValue = multiply(state.previousValue, state.currentValue);
-
-  if (state.lastOperation === "DIVIDE")
-    newPrevValue = divide(state.previousValue, state.currentValue);
+  if (newPrevValue === undefined) throw new Error("Explosion");
 
   return {
-    ...state,
-    lastOperation: "SUB",
-    previousValue: newPrevValue,
-    currentValue: "0",
-    hasDecimal: false,
-  };
-}
-
-function handleMultiply(state) {
-  if (!state.previousValue) {
-    const newPrevValue = state.currentValue;
-
-    return {
-      ...state,
-      lastOperation: "MULTIPLY",
-      previousValue: toDecimalNumber(newPrevValue),
-      currentValue: "0",
-      hasDecimal: false,
-    };
-  }
-
-  if (state.equalsWasLastOperation) {
-    const newPrevValue = state.currentValue;
-
-    return {
-      ...state,
-      lastOperation: "MULTIPLY",
-      previousValue: toDecimalNumber(newPrevValue),
-      currentValue: "0",
-      equalsWasLastOperation: false,
-      hasDecimal: false,
-    };
-  }
-
-  let newPrevValue;
-
-  if (state.lastOperation === "ADD")
-    newPrevValue = add(state.previousValue, state.currentValue);
-
-  if (state.lastOperation === "SUB")
-    newPrevValue = sub(state.previousValue, state.currentValue);
-
-  if (state.lastOperation === "MULTIPLY")
-    newPrevValue = multiply(state.previousValue, state.currentValue);
-
-  if (state.lastOperation === "DIVIDE")
-    newPrevValue = divide(state.previousValue, state.currentValue);
-
-  return {
-    ...state,
-    lastOperation: "MULTIPLY",
-    previousValue: newPrevValue,
-    currentValue: "0",
-    hasDecimal: false,
-  };
-}
-
-function handleDivide(state) {
-  if (!state.previousValue) {
-    const newPrevValue = state.currentValue;
-
-    return {
-      ...state,
-      lastOperation: "DIVIDE",
-      previousValue: toDecimalNumber(newPrevValue),
-      currentValue: "0",
-      hasDecimal: false,
-    };
-  }
-
-  if (state.equalsWasLastOperation) {
-    const newPrevValue = state.currentValue;
-
-    return {
-      ...state,
-      lastOperation: "DIVIDE",
-      previousValue: toDecimalNumber(newPrevValue),
-      currentValue: "0",
-      equalsWasLastOperation: false,
-      hasDecimal: false,
-    };
-  }
-
-  let newPrevValue;
-
-  if (state.lastOperation === "ADD")
-    newPrevValue = add(state.previousValue, state.currentValue);
-
-  if (state.lastOperation === "SUB")
-    newPrevValue = sub(state.previousValue, state.currentValue);
-
-  if (state.lastOperation === "MULTIPLY")
-    newPrevValue = multiply(state.previousValue, state.currentValue);
-
-  if (state.lastOperation === "DIVIDE")
-    newPrevValue = divide(state.previousValue, state.currentValue);
-
-  return {
-    ...state,
-    lastOperation: "DIVIDE",
-    previousValue: newPrevValue,
-    currentValue: "0",
-    hasDecimal: false,
+    ...newState,
+    previousValue: toDecimalNumber(newPrevValue),
   };
 }
 
 function handleEquals(state) {
-  if (state.lastOperation === "ADD") {
-    const newPrevAndCurrValue = add(state.previousValue, state.currentValue);
+  if (state.previousValue !== null && !Number.isFinite(state.previousValue))
+    return reset(state);
+
+  if (state.previousValue === null) return state;
+
+  let newState = {
+    ...state,
+    lastOperation: null,
+    equalsWasLastOperation: true,
+    hasDecimal: false,
+  };
+
+  const current = state.currentValue;
+
+  if (current[current.length - 1] === ".")
+    newState = { ...newState, hasDecimal: false };
+
+  if (state.lastOperation) {
+    const newPrevAndCurrValue = handlePreviousOperations(state);
 
     return {
-      ...state,
-      previousValue: newPrevAndCurrValue,
+      ...newState,
+      previousValue: toDecimalNumber(newPrevAndCurrValue),
       currentValue: decimalNumToStr(newPrevAndCurrValue),
-      lastOperation: null,
-      equalsWasLastOperation: true,
-      hasDecimal: false,
-    };
-  }
-
-  if (state.lastOperation === "SUB") {
-    const newPrevAndCurrValue = sub(state.previousValue, state.currentValue);
-
-    return {
-      ...state,
-      previousValue: newPrevAndCurrValue,
-      currentValue: decimalNumToStr(newPrevAndCurrValue),
-      lastOperation: null,
-      equalsWasLastOperation: true,
-      hasDecimal: false,
-    };
-  }
-
-  if (state.lastOperation === "MULTIPLY") {
-    const newPrevAndCurrValue = multiply(
-      state.previousValue,
-      state.currentValue
-    );
-
-    return {
-      ...state,
-      previousValue: newPrevAndCurrValue,
-      currentValue: decimalNumToStr(newPrevAndCurrValue),
-      lastOperation: null,
-      equalsWasLastOperation: true,
-      hasDecimal: false,
-    };
-  }
-
-  if (state.lastOperation === "DIVIDE") {
-    const newPrevAndCurrValue = divide(state.previousValue, state.currentValue);
-
-    return {
-      ...state,
-      previousValue: newPrevAndCurrValue,
-      currentValue: decimalNumToStr(newPrevAndCurrValue),
-      lastOperation: null,
-      equalsWasLastOperation: true,
-      hasDecimal: false,
     };
   }
 
   return { ...state, currentValue: decimalNumToStr(state.previousValue) };
 }
 
-function toDecimalNumber(strNum) {
-  return Number.parseFloat(strNum);
-}
-
-function decimalNumToStr(num) {
-  num = Number.parseFloat(num.toFixed(3));
-
-  if (Number.isInteger(num)) return num.toString();
-
-  return num.toString();
+function reset(state) {
+  const currentTheme = state.currentTheme;
+  return { ...initialState, currentTheme };
 }
 
 function isValidNumber(num) {
@@ -417,6 +219,24 @@ function isValidNumber(num) {
       Number.parseInt(num) < Number.MAX_SAFE_INTEGER) ||
     toDecimalNumber(num) < Number.MAX_VALUE
   );
+}
+
+function handlePreviousOperations(state) {
+  let newPrevValue;
+
+  if (state.lastOperation === "ADD")
+    newPrevValue = add(state.previousValue, state.currentValue);
+
+  if (state.lastOperation === "SUB")
+    newPrevValue = sub(state.previousValue, state.currentValue);
+
+  if (state.lastOperation === "MULTIPLY")
+    newPrevValue = multiply(state.previousValue, state.currentValue);
+
+  if (state.lastOperation === "DIVIDE")
+    newPrevValue = divide(state.previousValue, state.currentValue);
+
+  return newPrevValue;
 }
 
 function add(n1, n2) {
@@ -433,4 +253,20 @@ function multiply(n1, n2) {
 
 function divide(n1, n2) {
   return toDecimalNumber(n1) / toDecimalNumber(n2);
+}
+
+function hasDecimal(num) {
+  return !Number.isInteger(Number.parseFloat(num));
+}
+
+function toDecimalNumber(strNum) {
+  return Number.parseFloat(strNum);
+}
+
+function decimalNumToStr(num) {
+  num = Number.parseFloat(num.toFixed(3));
+
+  if (Number.isInteger(num)) return num.toString();
+
+  return num.toString();
 }
