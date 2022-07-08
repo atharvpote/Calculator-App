@@ -14,6 +14,11 @@ export function Keypad() {
   const del = () => dispatch({ type: "DEL" });
   const reset = () => dispatch({ type: "RESET" });
   const decimal = () => dispatch({ type: "DECIMAL" });
+  const add = () => dispatch({ type: "ADD" });
+  const sub = () => dispatch({ type: "SUB" });
+  const multiply = () => dispatch({ type: "MULTIPLY" });
+  const divide = () => dispatch({ type: "DIVIDE" });
+  const equals = () => dispatch({ type: "EQUALS" });
 
   return (
     <StyledKeypad>
@@ -36,7 +41,7 @@ export function Keypad() {
       <Button value={6} onClick={numPress}>
         6
       </Button>
-      <Button>+</Button>
+      <Button onClick={add}>+</Button>
       <Button value={1} onClick={numPress}>
         1
       </Button>
@@ -46,15 +51,15 @@ export function Keypad() {
       <Button value={3} onClick={numPress}>
         3
       </Button>
-      <Button> -</Button>
+      <Button onClick={sub}> -</Button>
       <Button onClick={decimal}>.</Button>
       <Button value={0} onClick={numPress}>
         0
       </Button>
-      <Button>/</Button>
-      <Button>x</Button>
+      <Button onClick={divide}>/</Button>
+      <Button onClick={multiply}>x</Button>
       <Reset onClick={reset}>RESET</Reset>
-      <Equals> =</Equals>
+      <Equals onClick={equals}> =</Equals>
     </StyledKeypad>
   );
 }
