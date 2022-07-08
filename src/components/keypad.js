@@ -1,26 +1,59 @@
+import { useContext } from "react";
 import styled from "styled-components";
 import { fontFamily, fontWeight, typeScale } from "../utils";
+import { StateContext } from "../stateManagement";
 
 export function Keypad() {
+  const { dispatch } = useContext(StateContext);
+
+  const numPress = (e) =>
+    dispatch({
+      type: "NUM_PRESS",
+      payload: { value: e.target.value },
+    });
+  const del = () => dispatch({ type: "DEL" });
+  const reset = () => dispatch({ type: "RESET" });
+  const decimal = () => dispatch({ type: "DECIMAL" });
+
   return (
     <StyledKeypad>
-      <Button>7</Button>
-      <Button>8</Button>
-      <Button>9</Button>
-      <Del>DEL</Del>
-      <Button>4</Button>
-      <Button>5</Button>
-      <Button>6</Button>
+      <Button value={7} onClick={numPress}>
+        7
+      </Button>
+      <Button value={8} onClick={numPress}>
+        8
+      </Button>
+      <Button value={9} onClick={numPress}>
+        9
+      </Button>
+      <Del onClick={del}>DEL</Del>
+      <Button value={4} onClick={numPress}>
+        4
+      </Button>
+      <Button value={5} onClick={numPress}>
+        5
+      </Button>
+      <Button value={6} onClick={numPress}>
+        6
+      </Button>
       <Button>+</Button>
-      <Button>1</Button>
-      <Button>2</Button>
-      <Button>3</Button>
+      <Button value={1} onClick={numPress}>
+        1
+      </Button>
+      <Button value={2} onClick={numPress}>
+        2
+      </Button>
+      <Button value={3} onClick={numPress}>
+        3
+      </Button>
       <Button> -</Button>
-      <Button>.</Button>
-      <Button>0</Button>
+      <Button onClick={decimal}>.</Button>
+      <Button value={0} onClick={numPress}>
+        0
+      </Button>
       <Button>/</Button>
       <Button>x</Button>
-      <Reset>RESET</Reset>
+      <Reset onClick={reset}>RESET</Reset>
       <Equals> =</Equals>
     </StyledKeypad>
   );
@@ -34,6 +67,7 @@ const StyledKeypad = styled.div`
   place-content: center;
   grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
+  transition: all 0.5s;
 `;
 
 const Button = styled.button`
@@ -49,7 +83,7 @@ const Button = styled.button`
   background-color: ${({ theme }) => theme.keys.normalKeys.keyBackground};
   color: ${({ theme }) => theme.keys.normalKeys.keyText};
   cursor: pointer;
-  transition: box-shadow 0.25s, transform 0.25s;
+  transition: box-shadow 0.125s, transform 0.125s;
 
   &:active {
     box-shadow: 0 0 0 0 ${({ theme }) => theme.keys.normalKeys.keyShadow};

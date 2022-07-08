@@ -24,7 +24,7 @@ export const keyColors = {
   darkGrayishOrange: "hsl(35, 11%, 61%)",
   darkViolet: "hsl(281, 89%, 26%)",
   vividMagenta: "hsl(285, 91%, 52%)",
-  pureCyan: "hsl(176, 100%, 44%),",
+  pureCyan: "hsl(176, 100%, 44%)",
   softCyan: "hsl(177, 92%, 70%)",
   veryDarkViolet: "hsl(268, 47%, 21%)",
   darkMagenta: "hsl(290, 70%, 36%)",

@@ -29,6 +29,7 @@ export const dark = {
   },
   text: {
     title: textColors.white,
+    screenText: textColors.white,
   },
 };
 
@@ -61,6 +62,7 @@ export const light = {
   },
   text: {
     title: textColors.veryDarkGrayishYellow,
+    screenText: textColors.veryDarkGrayishYellow,
   },
 };
 
@@ -93,5 +95,6 @@ export const purple = {
   },
   text: {
     title: textColors.lightYellow,
+    screenText: textColors.lightYellow,
   },
 };

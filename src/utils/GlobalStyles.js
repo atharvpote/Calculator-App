@@ -19,5 +19,6 @@ body{
     place-content: center;
     background-color: ${({ theme }) => theme.backgrounds.mainBackground};
     color: ${({ theme }) => theme.text.title};
+    transition: all 0.5s;
 }
 `;

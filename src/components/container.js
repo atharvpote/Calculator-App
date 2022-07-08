@@ -1,15 +1,13 @@
-import { arrayOf, object } from "prop-types";
+import { arrayOf, element } from "prop-types";
 import styled from "styled-components";
 import { fluidRange } from "polished";
 
 export function Container({ children }) {
-  console.log(children);
-
   return <StyledContainer>{children}</StyledContainer>;
 }
 
 Container.propTypes = {
-  children: arrayOf(object),
+  children: arrayOf(element),
 };
 
 const StyledContainer = styled.div`

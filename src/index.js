@@ -1,20 +1,20 @@
 import { createRoot } from "react-dom/client";
-import { ThemeProvider } from "styled-components";
-import { GlobalStyles, dark } from "./utils";
+import { GlobalStyles } from "./utils";
 import { Container, Header, Screen, Keypad } from "./components";
+import { StateContextProvider } from "./stateManagement";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
 
 root.render(
   <div>
-    <ThemeProvider theme={dark}>
+    <StateContextProvider>
       <GlobalStyles />
       <Container>
         <Header />
         <Screen />
         <Keypad />
       </Container>
-    </ThemeProvider>
+    </StateContextProvider>
   </div>
 );
