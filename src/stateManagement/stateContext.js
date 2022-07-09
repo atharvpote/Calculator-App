@@ -25,6 +25,7 @@ const initialState = {
   lastAction: null,
   lastOperation: null,
   operationTriggered: false,
+  lastOpInvalid: false,
   hasDecimal: false,
 };
 
@@ -69,12 +70,16 @@ function reducer(state, action) {
 }
 
 function handleNumPress(state, action) {
-  if (state.previous !== null && !Number.isFinite(state.previous))
-    return reset(state, action);
-
   let newState = { ...state, lastAction: action.type };
 
-  if (state.current === "0")
+  if (lastOpInvalidOrInfinity(state))
+    newState = {
+      ...initialState,
+      theme: state.theme,
+      lastAction: action.type,
+      current: action.payload.value,
+    };
+  else if (state.current === "0")
     newState = { ...newState, current: action.payload.value };
   else if (state.operationTriggered)
     newState = {
@@ -90,8 +95,7 @@ function handleNumPress(state, action) {
 }
 
 function handleDel(state, action) {
-  if (state.previous !== null && !Number.isFinite(state.previous))
-    return reset(state, action);
+  if (lastOpInvalidOrInfinity(state)) return reset(state, action);
 
   let newState = {
     ...state,
@@ -116,15 +120,19 @@ function handleDel(state, action) {
 }
 
 function handleDecimal(state, action) {
-  if (state.previous !== null && !Number.isFinite(state.previous))
-    return reset(state, action);
-
   let newState = {
     ...state,
     lastAction: action.type,
   };
 
-  if (state.operationTriggered)
+  if (lastOpInvalidOrInfinity(state))
+    newState = {
+      ...initialState,
+      theme: state.theme,
+      lastAction: action.type,
+      current: "0.",
+    };
+  else if (state.operationTriggered)
     newState = {
       ...newState,
       current: "0.",
@@ -143,8 +151,7 @@ function handleDecimal(state, action) {
 }
 
 function handleOperation(state, action) {
-  if (state.previous !== null && !Number.isFinite(state.previous))
-    return reset(state, action);
+  if (lastOpInvalidOrInfinity(state)) return reset(state, action);
 
   let newState = {
     ...state,
@@ -170,21 +177,30 @@ function handleOperation(state, action) {
 }
 
 function handleEquals(state, action) {
-  if (state.previous !== null && !Number.isFinite(state.previous))
-    return reset(state, action);
+  if (lastOpInvalidOrInfinity(state)) return reset(state, action);
 
   let newState = { ...state, lastAction: action.type };
 
   if (state.lastOperation !== null) {
     const calculation = handleLastOperation(state);
 
-    newState = {
-      ...newState,
-      previous: calculation,
-      current: toStr(calculation),
-      lastOperation: null,
-      hasDecimal: !Number.isInteger(calculation),
-    };
+    if (Number.isNaN(calculation))
+      newState = {
+        ...newState,
+        previous: null,
+        current: "Invalid Operation",
+        lastOpInvalid: true,
+        lastOperation: null,
+        hasDecimal: !Number.isInteger(calculation),
+      };
+    else
+      newState = {
+        ...newState,
+        previous: calculation,
+        current: toStr(calculation),
+        lastOperation: null,
+        hasDecimal: !Number.isInteger(calculation),
+      };
   }
 
   return newState;
@@ -239,7 +255,7 @@ function toNum(strNum) {
 }
 
 function toStr(num) {
-  return Number.parseFloat(num.toFixed(5)).toString();
+  return Number.parseFloat(num.toFixed(8)).toString();
 }
 
 function lastChar(str) {
@@ -252,4 +268,11 @@ function removeLastChar(str) {
 
 function isValidNumber(num) {
   return Number.parseFloat(num) < Number.MAX_SAFE_INTEGER;
+}
+
+function lastOpInvalidOrInfinity(state) {
+  return (
+    (state.previous !== null && !Number.isFinite(state.previous)) ||
+    state.lastOpInvalid
+  );
 }
