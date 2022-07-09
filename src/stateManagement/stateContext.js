@@ -86,6 +86,8 @@ function handleNumPress(state, action) {
   else if (isValidNumber(state.current + action.payload.value))
     newState = { ...newState, current: state.current + action.payload.value };
 
+  console.log(newState);
+
   return newState;
 }
 
@@ -111,6 +113,8 @@ function handleDel(state, action) {
     };
 
   if (newState.current.length == 0) newState = { ...newState, current: "0" };
+
+  console.log(newState);
 
   return newState;
 }
@@ -139,6 +143,8 @@ function handleDecimal(state, action) {
       hasDecimal: true,
     };
 
+  console.log(newState);
+
   return newState;
 }
 
@@ -166,6 +172,8 @@ function handleOperation(state, action) {
       previous: handleLastOperation(state),
     };
 
+  console.log(newState);
+
   return newState;
 }
 
@@ -187,6 +195,8 @@ function handleEquals(state, action) {
     };
   }
 
+  console.log(newState);
+
   return newState;
 }
 
@@ -196,6 +206,8 @@ function reset(state, action) {
     theme: state.theme,
     lastAction: action.type,
   };
+
+  console.log(newState);
 
   return newState;
 }
