@@ -28,7 +28,6 @@ const initialState = {
 };
 
 function reducer(state, action) {
-  console.log(state);
   if (action.type === "NUM_PRESS") {
     return handleNumPress(state, action);
   }
@@ -168,8 +167,6 @@ function handleOperation(state, action) {
   }
 
   const newPrevValue = handlePreviousOperations(state);
-
-  if (newPrevValue === undefined) throw new Error("Explosion");
 
   return {
     ...newState,
