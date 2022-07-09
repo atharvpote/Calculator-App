@@ -1,3 +1,4 @@
+import { mix } from "polished";
 import { backgroundColors, keyColors, textColors } from "./colors";
 
 export const dark = {
@@ -21,6 +22,19 @@ export const dark = {
       keyBackground: keyColors.lightGrayishOrange,
       keyShadow: keyColors.grayishOrange,
       keyText: textColors.veryDarkGrayishBlue,
+    },
+    operationHighlight: {
+      keyBackground: `${mix(
+        0.5,
+        keyColors.desaturatedDarkBlueV1,
+        keyColors.red
+      )}`,
+      keyShadow: `${mix(
+        0.5,
+        keyColors.desaturatedDarkBlueV2,
+        keyColors.darkRed
+      )}`,
+      keyText: textColors.white,
     },
   },
   toggle: {
@@ -55,6 +69,15 @@ export const light = {
       keyShadow: keyColors.darkGrayishOrange,
       keyText: textColors.veryDarkGrayishYellow,
     },
+    operationHighlight: {
+      keyBackground: `${mix(
+        0.5,
+        keyColors.darkModerateCyan,
+        keyColors.orange
+      )}`,
+      keyShadow: `${mix(0.5, keyColors.veryDarkCyan, keyColors.darkOrange)}`,
+      keyText: textColors.white,
+    },
   },
   toggle: {
     toggleColor: keyColors.orange,
@@ -87,6 +110,11 @@ export const purple = {
       keyBackground: keyColors.veryDarkViolet,
       keyShadow: keyColors.darkMagenta,
       keyText: textColors.lightYellow,
+    },
+    operationHighlight: {
+      keyBackground: `${mix(0.5, keyColors.darkViolet, keyColors.pureCyan)}`,
+      keyShadow: `${mix(0.5, keyColors.vividMagenta, keyColors.softCyan)}`,
+      keyText: textColors.white,
     },
   },
   toggle: {

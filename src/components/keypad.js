@@ -1,10 +1,10 @@
 import { useContext } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { fontFamily, fontWeight, typeScale } from "../utils";
 import { StateContext } from "../stateManagement";
 
 export function Keypad() {
-  const { dispatch } = useContext(StateContext);
+  const { state, dispatch } = useContext(StateContext);
 
   const numPress = (e) =>
     dispatch({
@@ -41,7 +41,9 @@ export function Keypad() {
       <Button value={6} onClick={numPress}>
         6
       </Button>
-      <Button onClick={add}>+</Button>
+      <Button onClick={add} active={state.lastOperation === "ADD"}>
+        +
+      </Button>
       <Button value={1} onClick={numPress}>
         1
       </Button>
@@ -51,13 +53,19 @@ export function Keypad() {
       <Button value={3} onClick={numPress}>
         3
       </Button>
-      <Button onClick={sub}> -</Button>
+      <Button onClick={sub} active={state.lastOperation === "SUB"}>
+        -
+      </Button>
       <Button onClick={decimal}>.</Button>
       <Button value={0} onClick={numPress}>
         0
       </Button>
-      <Button onClick={divide}>/</Button>
-      <Button onClick={multiply}>x</Button>
+      <Button onClick={divide} active={state.lastOperation === "DIVIDE"}>
+        /
+      </Button>
+      <Button onClick={multiply} active={state.lastOperation === "MULTIPLY"}>
+        x
+      </Button>
       <Reset onClick={reset}>RESET</Reset>
       <Equals onClick={equals}> =</Equals>
     </StyledKeypad>
@@ -84,16 +92,34 @@ const Button = styled.button`
   font-family: ${fontFamily};
   font-size: ${typeScale.heading4};
   font-weight: ${fontWeight};
-  box-shadow: 0 3px 0 0 ${({ theme }) => theme.keys.normalKeys.keyShadow};
-  background-color: ${({ theme }) => theme.keys.normalKeys.keyBackground};
-  color: ${({ theme }) => theme.keys.normalKeys.keyText};
   cursor: pointer;
-  transition: box-shadow 0.125s, transform 0.125s;
+  transition: box-shadow 0.125s, transform 0.125s, background-color 0.125s,
+    color 0.125s;
 
-  &:active {
-    box-shadow: 0 0 0 0 ${({ theme }) => theme.keys.normalKeys.keyShadow};
-    transform: translateY(3px);
-  }
+  ${({ theme, active }) => {
+    if (active)
+      return css`
+        box-shadow: 0 3px 0 0 ${theme.keys.operationHighlight.keyShadow};
+        background-color: ${theme.keys.operationHighlight.keyBackground};
+        color: ${theme.keys.operationHighlight.keyText};
+
+        &:active {
+          box-shadow: 0 0 0 0 ${theme.keys.operationHighlight.keyShadow};
+          transform: translateY(3px);
+        }
+      `;
+    else
+      return css`
+        box-shadow: 0 3px 0 0 ${theme.keys.normalKeys.keyShadow};
+        background-color: ${theme.keys.normalKeys.keyBackground};
+        color: ${theme.keys.normalKeys.keyText};
+
+        &:active {
+          box-shadow: 0 0 0 0 ${theme.keys.normalKeys.keyShadow};
+          transform: translateY(3px);
+        }
+      `;
+  }}
 `;
 
 const Del = styled(Button)`
