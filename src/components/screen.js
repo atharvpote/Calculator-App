@@ -6,7 +6,7 @@ import { StateContext } from "../stateManagement";
 export function Screen() {
   const { state } = useContext(StateContext);
 
-  return <StyledScreen>{state.currentValue}</StyledScreen>;
+  return <StyledScreen>{state.current}</StyledScreen>;
 }
 
 const StyledScreen = styled.div`
