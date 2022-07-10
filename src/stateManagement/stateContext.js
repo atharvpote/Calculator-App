@@ -27,6 +27,7 @@ const initialState = {
   operationTriggered: false,
   lastOpInvalid: false,
   hasDecimal: false,
+  firstInput: true,
 };
 
 function reducer(state, action) {
@@ -80,7 +81,11 @@ function handleNumPress(state, action) {
       current: action.payload.value,
     };
   else if (state.current === "0")
-    newState = { ...newState, current: action.payload.value };
+    newState = {
+      ...newState,
+      current: action.payload.value,
+      firstInput: false,
+    };
   else if (state.operationTriggered)
     newState = {
       ...newState,
@@ -91,11 +96,15 @@ function handleNumPress(state, action) {
   else if (isValidNumber(state.current + action.payload.value))
     newState = { ...newState, current: state.current + action.payload.value };
 
+  console.log(newState);
+
   return newState;
 }
 
 function handleDel(state, action) {
   if (lastOpInvalidOrInfinity(state)) return reset(state, action);
+
+  if (state.firstInput) return state;
 
   let newState = {
     ...state,
@@ -115,6 +124,8 @@ function handleDel(state, action) {
     };
 
   if (newState.current.length == 0) newState = { ...newState, current: "0" };
+
+  console.log(newState);
 
   return newState;
 }
@@ -147,11 +158,15 @@ function handleDecimal(state, action) {
       hasDecimal: true,
     };
 
+  console.log(newState);
+
   return newState;
 }
 
 function handleOperation(state, action) {
   if (lastOpInvalidOrInfinity(state)) return reset(state, action);
+
+  if (state.firstInput) return state;
 
   let newState = {
     ...state,
@@ -173,11 +188,15 @@ function handleOperation(state, action) {
       previous: handleLastOperation(state),
     };
 
+  console.log(newState);
+
   return newState;
 }
 
 function handleEquals(state, action) {
   if (lastOpInvalidOrInfinity(state)) return reset(state, action);
+
+  if (state.firstInput) return state;
 
   let newState = { ...state, lastAction: action.type };
 
@@ -203,15 +222,21 @@ function handleEquals(state, action) {
       };
   }
 
+  console.log(newState);
+
   return newState;
 }
 
 function reset(state, action) {
+  if (state.firstInput) return state;
+
   const newState = {
     ...initialState,
     theme: state.theme,
     lastAction: action.type,
   };
+
+  console.log(newState);
 
   return newState;
 }
