@@ -4,6 +4,7 @@ import { ThemeProvider } from "styled-components";
 import { dark } from "../utils";
 
 export const StateContext = createContext();
+
 export function StateContextProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -23,6 +24,7 @@ const initialState = {
   current: "0",
   previous: null,
   lastAction: null,
+  currentOperation: null,
   lastOperation: null,
   operationTriggered: false,
   lastOpInvalid: false,
@@ -73,59 +75,63 @@ function reducer(state, action) {
 function handleNumPress(state, action) {
   let newState = { ...state, lastAction: action.type };
 
+  // Reset and enter the input on screen if last calculation was invalid. Disable first input flag
   if (lastOpInvalidOrInfinity(state))
     newState = {
       ...initialState,
       theme: state.theme,
       lastAction: action.type,
       current: action.payload.value,
+      firstInput: false,
     };
+  // If app is in initial state replace 0
   else if (state.current === "0")
     newState = {
       ...newState,
       current: action.payload.value,
       firstInput: false,
     };
+  // If last keypress was an operation replace the display text. Disable first input flag
   else if (state.operationTriggered)
     newState = {
       ...newState,
       current: action.payload.value,
       operationTriggered: false,
+      currentOperation: false,
       hasDecimal: false,
     };
+  // Validates if input number is in lover than MAX_SAFE_INTEGER
   else if (isValidNumber(state.current + action.payload.value))
     newState = { ...newState, current: state.current + action.payload.value };
-
-  console.log(newState);
 
   return newState;
 }
 
 function handleDel(state, action) {
+  // Reset if last calculation was invalid
   if (lastOpInvalidOrInfinity(state)) return reset(state, action);
-
+  // If there is no first input return same state
   if (state.firstInput) return state;
 
   let newState = {
     ...state,
     lastAction: action.type,
   };
-
+  // If last char in string is decimal delete it and turn of hasDecimal flag
   if (lastChar(state.current) === ".")
     newState = {
       ...newState,
       current: removeLastChar(state.current),
       hasDecimal: false,
     };
+  // Remove last char
   else
     newState = {
       ...newState,
       current: removeLastChar(state.current),
     };
-
+  // If string is empty after removing last char replace it with "0"
   if (newState.current.length == 0) newState = { ...newState, current: "0" };
-
-  console.log(newState);
 
   return newState;
 }
@@ -135,37 +141,42 @@ function handleDecimal(state, action) {
     ...state,
     lastAction: action.type,
   };
-
+  // If last calculation was invalid reset the app and input 0. Disable first input flag
   if (lastOpInvalidOrInfinity(state))
     newState = {
       ...initialState,
       theme: state.theme,
       lastAction: action.type,
       current: "0.",
+      firstInput: false,
     };
+  // In last input was an operation reset the display and add 0. on screen. Disable first input flag
   else if (state.operationTriggered)
     newState = {
       ...newState,
       current: "0.",
       hasDecimal: true,
       operationTriggered: false,
+      currentTriggered: false,
+      firstInput: false,
     };
+  // Add decimal if there was not decimal already
   else if (!state.hasDecimal)
     newState = {
       ...newState,
       lastAction: action.type,
       current: state.current + ".",
       hasDecimal: true,
+      firstInput: false,
     };
-
-  console.log(newState);
 
   return newState;
 }
 
 function handleOperation(state, action) {
+  // Reset if last calculation was invalid
   if (lastOpInvalidOrInfinity(state)) return reset(state, action);
-
+  // If there is no first input return same state
   if (state.firstInput) return state;
 
   let newState = {
@@ -173,36 +184,45 @@ function handleOperation(state, action) {
     lastAction: action.type,
   };
 
-  if (state.previous === null || state.lastOperation === null)
-    newState = {
-      ...newState,
-      lastOperation: action.type,
-      operationTriggered: true,
-      previous: toNum(state.current),
-    };
-  else
-    newState = {
-      ...newState,
-      lastOperation: action.type,
-      operationTriggered: true,
-      previous: handleLastOperation(state),
-    };
+  // Only trigger when last keypress was not operation selection
+  if (!lastActionIsAnOperation(state))
+    if (state.previous === null || state.lastOperation === null)
+      // If there is no last operation or previous covert current number string to number and store it in state.previous
+      newState = {
+        ...newState,
+        lastOperation: action.type,
+        operationTriggered: true,
+        currentOperation: action.type,
+        previous: toNum(state.current),
+      };
+    // Calculate the last operation, store the result in both state.previous and state.current
+    else {
+      const calculation = handleLastOperation(state);
 
-  console.log(newState);
+      newState = {
+        ...newState,
+        lastOperation: action.type,
+        operationTriggered: true,
+        currentOperation: action.type,
+        previous: calculation,
+        current: toStr(calculation),
+      };
+    }
 
   return newState;
 }
 
 function handleEquals(state, action) {
+  // Reset if last calculation was invalid
   if (lastOpInvalidOrInfinity(state)) return reset(state, action);
-
+  // If there is no first input return same state
   if (state.firstInput) return state;
 
   let newState = { ...state, lastAction: action.type };
-
+  // Only change other state properties if last operation is there
   if (state.lastOperation !== null) {
     const calculation = handleLastOperation(state);
-
+    // If calculation is NaN display it is an invalid number and reset few properties
     if (Number.isNaN(calculation))
       newState = {
         ...newState,
@@ -212,6 +232,7 @@ function handleEquals(state, action) {
         lastOperation: null,
         hasDecimal: !Number.isInteger(calculation),
       };
+    // Calculate and display the result, set decimal flag according to the result
     else
       newState = {
         ...newState,
@@ -221,8 +242,6 @@ function handleEquals(state, action) {
         hasDecimal: !Number.isInteger(calculation),
       };
   }
-
-  console.log(newState);
 
   return newState;
 }
@@ -236,27 +255,19 @@ function reset(state, action) {
     lastAction: action.type,
   };
 
-  console.log(newState);
-
   return newState;
 }
 
 function handleLastOperation(state) {
-  let result;
+  if (state.lastOperation === "ADD") return add(state.previous, state.current);
 
-  if (state.lastOperation === "ADD")
-    result = add(state.previous, state.current);
-
-  if (state.lastOperation === "SUB")
-    result = sub(state.previous, state.current);
+  if (state.lastOperation === "SUB") return sub(state.previous, state.current);
 
   if (state.lastOperation === "MULTIPLY")
-    result = multiply(state.previous, state.current);
+    return multiply(state.previous, state.current);
 
   if (state.lastOperation === "DIVIDE")
-    result = divide(state.previous, state.current);
-
-  return result;
+    return divide(state.previous, state.current);
 }
 
 function add(n1, n2) {
@@ -299,5 +310,11 @@ function lastOpInvalidOrInfinity(state) {
   return (
     (state.previous !== null && !Number.isFinite(state.previous)) ||
     state.lastOpInvalid
+  );
+}
+
+function lastActionIsAnOperation(state) {
+  return ["ADD", "SUB", "MULTIPLY", "DIVIDE"].some(
+    (op) => op === state.lastAction
   );
 }

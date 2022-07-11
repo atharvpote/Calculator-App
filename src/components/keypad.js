@@ -41,7 +41,7 @@ export function Keypad() {
       <Button value={6} onClick={numPress}>
         6
       </Button>
-      <Button onClick={add} active={state.lastOperation === "ADD"}>
+      <Button onClick={add} active={state.currentOperation === "ADD"}>
         +
       </Button>
       <Button value={1} onClick={numPress}>
@@ -53,17 +53,17 @@ export function Keypad() {
       <Button value={3} onClick={numPress}>
         3
       </Button>
-      <Button onClick={sub} active={state.lastOperation === "SUB"}>
+      <Button onClick={sub} active={state.currentOperation === "SUB"}>
         -
       </Button>
       <Button onClick={decimal}>.</Button>
       <Button value={0} onClick={numPress}>
         0
       </Button>
-      <Button onClick={divide} active={state.lastOperation === "DIVIDE"}>
+      <Button onClick={divide} active={state.currentOperation === "DIVIDE"}>
         /
       </Button>
-      <Button onClick={multiply} active={state.lastOperation === "MULTIPLY"}>
+      <Button onClick={multiply} active={state.currentOperation === "MULTIPLY"}>
         x
       </Button>
       <Reset onClick={reset}>RESET</Reset>
