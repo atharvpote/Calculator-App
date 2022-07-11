@@ -104,6 +104,8 @@ function handleNumPress(state, action) {
   else if (isValidNumber(state.current + action.payload.value))
     newState = { ...newState, current: state.current + action.payload.value };
 
+  console.log(newState);
+
   return newState;
 }
 
@@ -182,6 +184,9 @@ function handleOperation(state, action) {
   let newState = {
     ...state,
     lastAction: action.type,
+    lastOperation: action.type,
+    operationTriggered: true,
+    currentOperation: action.type,
   };
 
   // Only trigger when last keypress was not operation selection
@@ -190,9 +195,6 @@ function handleOperation(state, action) {
       // If there is no last operation or previous covert current number string to number and store it in state.previous
       newState = {
         ...newState,
-        lastOperation: action.type,
-        operationTriggered: true,
-        currentOperation: action.type,
         previous: toNum(state.current),
       };
     // Calculate the last operation, store the result in both state.previous and state.current
@@ -201,13 +203,12 @@ function handleOperation(state, action) {
 
       newState = {
         ...newState,
-        lastOperation: action.type,
-        operationTriggered: true,
-        currentOperation: action.type,
         previous: calculation,
         current: toStr(calculation),
       };
     }
+
+  console.log(newState);
 
   return newState;
 }
