@@ -25,15 +25,11 @@ export const dark = {
     },
     operationHighlight: {
       keyBackground: `${mix(
-        0.5,
-        keyColors.desaturatedDarkBlueV1,
+        0.25,
+        keyColors.lightGrayishOrange,
         keyColors.red
       )}`,
-      keyShadow: `${mix(
-        0.5,
-        keyColors.desaturatedDarkBlueV2,
-        keyColors.darkRed
-      )}`,
+      keyShadow: `${mix(0.25, keyColors.grayishOrange, keyColors.darkRed)}`,
       keyText: textColors.white,
     },
   },
@@ -72,10 +68,14 @@ export const light = {
     operationHighlight: {
       keyBackground: `${mix(
         0.5,
-        keyColors.darkModerateCyan,
+        keyColors.lightGrayishYellow,
         keyColors.orange
       )}`,
-      keyShadow: `${mix(0.5, keyColors.veryDarkCyan, keyColors.darkOrange)}`,
+      keyShadow: `${mix(
+        0.5,
+        keyColors.darkGrayishOrange,
+        keyColors.darkOrange
+      )}`,
       keyText: textColors.white,
     },
   },
@@ -112,8 +112,12 @@ export const purple = {
       keyText: textColors.lightYellow,
     },
     operationHighlight: {
-      keyBackground: `${mix(0.5, keyColors.darkViolet, keyColors.pureCyan)}`,
-      keyShadow: `${mix(0.5, keyColors.vividMagenta, keyColors.softCyan)}`,
+      keyBackground: `${mix(
+        0.75,
+        keyColors.veryDarkViolet,
+        keyColors.pureCyan
+      )}`,
+      keyShadow: `${mix(0.25, keyColors.darkMagenta, keyColors.softCyan)}`,
       keyText: textColors.white,
     },
   },
