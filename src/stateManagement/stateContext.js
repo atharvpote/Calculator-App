@@ -110,6 +110,7 @@ function handleNumPress(state, action) {
 function handleDel(state, action) {
   // Reset if last calculation was invalid
   if (lastOpInvalidOrInfinity(state)) return reset(state, action);
+
   // If there is no first input return same state
   if (state.firstInput) return state;
 
@@ -118,6 +119,7 @@ function handleDel(state, action) {
     lastAction: action.type,
     current: removeLastChar(state.current),
   };
+
   // If last char in string is decimal delete it and turn of hasDecimal flag
   if (lastChar(state.current) === ".")
     newState = {
@@ -138,6 +140,7 @@ function handleDecimal(state, action) {
     hasDecimal: true,
     firstInput: false,
   };
+
   // If last calculation was invalid reset the app and input 0. Disable first input flag
   if (lastOpInvalidOrInfinity(state))
     newState = {
@@ -169,6 +172,7 @@ function handleDecimal(state, action) {
 function handleOperation(state, action) {
   // Reset if last calculation was invalid
   if (lastOpInvalidOrInfinity(state)) return reset(state, action);
+
   // If there is no first input return same state
   if (state.firstInput) return state;
 
@@ -205,6 +209,7 @@ function handleOperation(state, action) {
 function handleEquals(state, action) {
   // Reset if last calculation was invalid
   if (lastOpInvalidOrInfinity(state)) return reset(state, action);
+
   // If there is no first input return same state
   if (state.firstInput) return state;
 
@@ -214,9 +219,11 @@ function handleEquals(state, action) {
     lastOperation: null,
     currentOperation: null,
   };
+
   // Only change other state properties if last operation is there
   if (state.lastOperation !== null) {
     const calculation = handleLastOperation(state);
+
     // If calculation is NaN display it is an invalid number and reset few properties
     if (Number.isNaN(calculation))
       newState = {
