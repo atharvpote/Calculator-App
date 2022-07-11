@@ -187,7 +187,7 @@ function handleOperation(state, action) {
   // Only trigger when last keypress was not operation selection
   if (!lastActionIsAnOperation(state))
     if (state.previous === null || state.lastOperation === null)
-      // If there is no last operation or previous covert current number string to number and store it in state.previous
+      // If there is no lastOperation or previous value, covert current number string to number and store it in state.previous
       newState = {
         ...newState,
         previous: toNum(state.current),
