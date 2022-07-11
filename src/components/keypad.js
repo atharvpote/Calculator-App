@@ -56,7 +56,9 @@ export function Keypad() {
       <Button onClick={sub} active={state.currentOperation === "SUB"}>
         -
       </Button>
-      <Button onClick={decimal}>.</Button>
+      <Button onClick={decimal} active={state.hasDecimal}>
+        .
+      </Button>
       <Button value={0} onClick={numPress}>
         0
       </Button>

@@ -230,6 +230,7 @@ function handleEquals(state, action) {
         current: "Invalid Operation",
         lastOpInvalid: true,
         lastOperation: null,
+        currentOperation: null,
         hasDecimal: !Number.isInteger(calculation),
       };
     // Calculate and display the result, set decimal flag according to the result
@@ -239,6 +240,7 @@ function handleEquals(state, action) {
         previous: calculation,
         current: toStr(calculation),
         lastOperation: null,
+        currentOperation: null,
         hasDecimal: !Number.isInteger(calculation),
       };
   }
