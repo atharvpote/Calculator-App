@@ -1,15 +1,7 @@
-import { useContext } from "react";
 import styled from "styled-components";
-import { fontFamily, typeScale } from "../utils";
-import { StateContext } from "../stateManagement";
+import { typeScale, fontFamily } from "../../utils";
 
-export function Screen() {
-  const { state } = useContext(StateContext);
-
-  return <StyledScreen>{state.current}</StyledScreen>;
-}
-
-const StyledScreen = styled.div`
+export const StyledScreen = styled.div`
   display: block;
   width: 100%;
   background-color: ${({ theme }) => theme.backgrounds.screenBackground};
