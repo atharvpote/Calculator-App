@@ -19,7 +19,7 @@ export const Button = styled.button`
   border: none;
   border-radius: 5px;
   font-family: ${fontFamily};
-  font-size: ${typeScale.heading4};
+  font-size: ${typeScale.heading2};
   font-weight: ${fontWeight};
   cursor: pointer;
   transition: box-shadow 0.125s, transform 0.125s, background-color 0.125s,
