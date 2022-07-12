@@ -8,18 +8,18 @@ export const StyledKeypad = styled.div`
   display: grid;
   place-content: center;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
+  gap: 1.5rem;
   transition: all 0.5s;
 `;
 
 export const Button = styled.button`
   display: inline-block;
-  padding-block: 1.25rem;
+  padding-block: 0.75rem;
   width: 100%;
   border: none;
   border-radius: 5px;
   font-family: ${fontFamily};
-  font-size: ${typeScale.heading2};
+  font-size: ${typeScale.heading3};
   font-weight: ${fontWeight};
   cursor: pointer;
   transition: box-shadow 0.125s, transform 0.125s, background-color 0.125s,

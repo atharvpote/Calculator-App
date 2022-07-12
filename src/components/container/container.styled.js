@@ -6,7 +6,7 @@ export const StyledContainer = styled.div`
     {
       prop: "width",
       fromSize: "280px",
-      toSize: "576px",
+      toSize: "480px",
     },
     "280px",
     "1440px"
