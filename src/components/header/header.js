@@ -60,14 +60,29 @@ export function Header() {
   );
 
   function darkTheme() {
-    dispatch({ type: "DARKTHEME" });
+    dispatch({
+      type: "THEME",
+      payload: {
+        theme: dark,
+      },
+    });
   }
 
   function lightTheme() {
-    dispatch({ type: "LIGHTTHEME" });
+    dispatch({
+      type: "THEME",
+      payload: {
+        theme: light,
+      },
+    });
   }
 
   function purpleTheme() {
-    dispatch({ type: "PURPLETHEME" });
+    dispatch({
+      type: "THEME",
+      payload: {
+        theme: purple,
+      },
+    });
   }
 }

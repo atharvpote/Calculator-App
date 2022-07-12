@@ -1,6 +1,6 @@
 import { hideVisually } from "polished";
-import styled, { css } from "styled-components";
-import { typeScale, dark, light, purple } from "../../utils";
+import styled from "styled-components";
+import { typeScale } from "../../utils";
 
 export const StyledHeader = styled.header`
   transition: all 0.5s;
@@ -79,33 +79,12 @@ export const BaseToggle = styled.label`
     left: calc(var(--scale) * 40px);
     width: calc(var(--scale) * 120px);
     height: calc(var(--scale) * 120px);
-    background-color: ${({ theme }) => theme.toggle.toggleColor};
     border-radius: calc(var(--scale) * 120px);
     transition: 0.5s;
     z-index: 10;
-
-    ${({ enabled }) => {
-      if (enabled === dark) {
-        return css`
-          left: calc(var(--scale) * 40px);
-          transform: translateX(0%);
-        `;
-      }
-
-      if (enabled === light) {
-        return css`
-          left: calc(150% - calc(var(--scale) * 20px));
-          transform: translateX(-50%);
-        `;
-      }
-
-      if (enabled === purple) {
-        return css`
-          left: calc(300% - calc(var(--scale) * 40px));
-          transform: translateX(-100%);
-        `;
-      }
-    }}
+    background-color: ${({ theme }) => theme.toggle.toggleColor};
+    left: ${({ theme }) => theme.toggle.after.left};
+    transform: ${({ theme }) => theme.toggle.after.transform};
   }
 `;
 

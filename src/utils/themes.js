@@ -36,6 +36,10 @@ export const dark = {
   toggle: {
     toggleColor: keyColors.red,
     toggleBackground: backgroundColors.veryDarkDesaturatedBlueV2,
+    after: {
+      left: "calc(var(--scale) * 40px)",
+      transform: "translateX(0%)",
+    },
   },
   text: {
     title: textColors.white,
@@ -82,6 +86,10 @@ export const light = {
   toggle: {
     toggleColor: keyColors.orange,
     toggleBackground: backgroundColors.grayishRed,
+    after: {
+      left: "calc(150% - calc(var(--scale) * 20px))",
+      transform: "translateX(-50%)",
+    },
   },
   text: {
     title: textColors.veryDarkGrayishYellow,
@@ -124,6 +132,10 @@ export const purple = {
   toggle: {
     toggleColor: keyColors.pureCyan,
     toggleBackground: backgroundColors.veryDarkVioletV2,
+    after: {
+      left: "calc(300% - calc(var(--scale) * 40px))",
+      transform: "translateX(-100%)",
+    },
   },
   text: {
     title: textColors.lightYellow,

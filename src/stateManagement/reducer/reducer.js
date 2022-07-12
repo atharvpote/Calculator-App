@@ -23,11 +23,7 @@ export function reducer(state, action) {
 
   if (action.type === "EQUALS") return handleEquals(state, action);
 
-  if (action.type === "DARKTHEME") return handleThemeChange(state, action);
-
-  if (action.type === "LIGHTTHEME") return handleThemeChange(state, action);
-
-  if (action.type === "PURPLETHEME") return handleThemeChange(state, action);
+  if (action.type === "THEME") return handleThemeChange(state, action);
 
   if (action.type === "RESET") return reset(state, action);
 

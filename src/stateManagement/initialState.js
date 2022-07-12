@@ -1,7 +1,12 @@
 import { dark } from "../utils";
 
+let theme = dark;
+
+if (localStorage.getItem("theme"))
+  theme = JSON.parse(localStorage.getItem("theme"));
+
 const initialState = {
-  theme: dark,
+  theme,
   current: "0",
   previous: null,
   lastAction: null,
