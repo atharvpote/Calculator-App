@@ -21,16 +21,16 @@ export function Keypad() {
     dispatch({ type: "DECIMAL" });
   }
   function add() {
-    dispatch({ type: "ADD" });
+    dispatch({ type: "OPERATION", payload: { type: "ADD" } });
   }
   function sub() {
-    dispatch({ type: "SUB" });
+    dispatch({ type: "OPERATION", payload: { type: "SUB" } });
   }
   function multiply() {
-    dispatch({ type: "MULTIPLY" });
+    dispatch({ type: "OPERATION", payload: { type: "MULTIPLY" } });
   }
   function divide() {
-    dispatch({ type: "DIVIDE" });
+    dispatch({ type: "OPERATION", payload: { type: "DIVIDE" } });
   }
   function equals() {
     dispatch({ type: "EQUALS" });

@@ -13,13 +13,12 @@ export function handleOperation(state, action) {
 
   // If there is no first input return same state
   if (state.firstInput) return state;
-
   let newState = {
     ...state,
-    lastAction: action.type,
-    lastOperation: action.type,
+    lastAction: action.payload.type,
+    lastOperation: action.payload.type,
     operationTriggered: true,
-    currentOperation: action.type,
+    currentOperation: action.payload.type,
   };
 
   // Only trigger when last keypress was not operation selection

@@ -13,13 +13,7 @@ export function reducer(state, action) {
 
   if (action.type === "DECIMAL") return handleDecimal(state, action);
 
-  if (action.type === "ADD") return handleOperation(state, action);
-
-  if (action.type === "SUB") return handleOperation(state, action);
-
-  if (action.type === "MULTIPLY") return handleOperation(state, action);
-
-  if (action.type === "DIVIDE") return handleOperation(state, action);
+  if (action.type === "OPERATION") return handleOperation(state, action);
 
   if (action.type === "EQUALS") return handleEquals(state, action);
 
