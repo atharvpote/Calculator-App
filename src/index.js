@@ -12,11 +12,13 @@ root.render(
     <StrictMode>
       <StateContextProvider>
         <GlobalStyles />
-        <Container>
-          <Header />
-          <Screen />
-          <Keypad />
-        </Container>
+        <main>
+          <Container>
+            <Header />
+            <Screen />
+            <Keypad />
+          </Container>
+        </main>
       </StateContextProvider>
     </StrictMode>
   </div>
