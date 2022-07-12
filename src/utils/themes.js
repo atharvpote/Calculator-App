@@ -81,7 +81,7 @@ export const light = {
   },
   toggle: {
     toggleColor: keyColors.orange,
-    togglesBackground: backgroundColors.grayishRed,
+    toggleBackground: backgroundColors.grayishRed,
   },
   text: {
     title: textColors.veryDarkGrayishYellow,
@@ -123,7 +123,7 @@ export const purple = {
   },
   toggle: {
     toggleColor: keyColors.pureCyan,
-    togglesBackground: backgroundColors.veryDarkVioletV2,
+    toggleBackground: backgroundColors.veryDarkVioletV2,
   },
   text: {
     title: textColors.lightYellow,

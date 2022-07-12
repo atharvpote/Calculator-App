@@ -21,4 +21,6 @@ export const StyledContainer = styled.div`
     "280px",
     "375px"
   )}
+
+  margin-bottom: 2rem;
 `;

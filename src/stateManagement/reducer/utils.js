@@ -42,8 +42,11 @@ export function lastStateInvalidOrInfinity(state) {
 }
 
 export function lastActionIsAnOperation(state) {
-  return ["ADD", "SUB", "MULTIPLY", "DIVIDE"].some(
-    (operation) => operation === state.lastAction
+  return (
+    "ADD" === state.lastAction ||
+    "SUB" === state.lastAction ||
+    "MULTIPLY" === state.lastAction ||
+    "DIVIDE" === state.lastAction
   );
 }
 

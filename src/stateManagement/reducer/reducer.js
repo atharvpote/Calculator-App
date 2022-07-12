@@ -3,6 +3,7 @@ import { handleDel } from "./handleDel";
 import { handleDecimal } from "./handleDecimal";
 import { handleOperation } from "./handleOperation";
 import { handleEquals } from "./handleEquals";
+import { handleThemeChange } from "./handleThemeChange";
 import { reset } from "./reset";
 
 export function reducer(state, action) {
@@ -21,6 +22,12 @@ export function reducer(state, action) {
   if (action.type === "DIVIDE") return handleOperation(state, action);
 
   if (action.type === "EQUALS") return handleEquals(state, action);
+
+  if (action.type === "DARKTHEME") return handleThemeChange(state, action);
+
+  if (action.type === "LIGHTTHEME") return handleThemeChange(state, action);
+
+  if (action.type === "PURPLETHEME") return handleThemeChange(state, action);
 
   if (action.type === "RESET") return reset(state, action);
 
