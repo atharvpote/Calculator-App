@@ -1,4 +1,4 @@
-import reset from "./reset";
+import { reset } from "./reset";
 import { lastStateInvalidOrInfinity, removeLastChar, lastChar } from "./utils";
 
 export function handleDel(state, action) {

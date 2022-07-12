@@ -1,4 +1,4 @@
-import reset from "./reset";
+import { reset } from "./reset";
 import { lastStateInvalidOrInfinity, calculate, toStr } from "./utils";
 
 export function handleEquals(state, action) {
